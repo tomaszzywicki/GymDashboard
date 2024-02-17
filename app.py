@@ -13,14 +13,6 @@ colors = {
 }
 
 
-fig = px.scatter(df, x='weight_kg', y='reps')
-fig.update_layout(
-    plot_bgcolor=colors['background'],
-    paper_bgcolor=colors['background'],
-    font_color=colors['text']
-)
-
-
 app.layout = html.Div([
     html.Div(style={'backgroundColor': "yellow",
                     'textAlign': 'center'},
@@ -44,15 +36,15 @@ app.layout = html.Div([
 def render_content(tab):
     if tab == 'tab-1':
         return html.Div([
-            html.H3('Tab content 1'),
-            dcc.Graph(figure = fig),
-
-        ])
+            html.H2('Top 5 popular excercises'),
+            html.Div([
+                generate_table(df)
+            ])
+       ])
                          
     elif tab == 'tab-2':
         return html.Div([
             html.H3('Tab content 2'),
-            generate_table(df),
             html.H3('Select muscle group'),
             dcc.Dropdown(['Chest', 'Back', 'Arms', 'Legs'],
                          multi=False),
@@ -62,17 +54,15 @@ def render_content(tab):
         ])
     
 
-def generate_table(dataframe, max_rows=5):
-    return html.Table([
-        html.Thead(
-            html.Tr([html.Th(col) for col in dataframe.columns])
-        ),
-        html.Tbody([
-            html.Tr([
-                html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
-            ]) for i in range(min(len(dataframe), max_rows))
-        ])
-    ])
+def generate_table(dataframe):
+    # będzie w zależności od setów, repów
+    df = dataframe.groupby('exercise_title').agg({'exercise_title':'count'}).rename(columns={'exercise_title':'count'}).sort_values(by='count', ascending=False).head(5).reset_index()
+    return dash_table.DataTable(
+            id = 'exercise_table',
+            columns=[{"name": col, 'id': col} for col in df.columns],
+            data=df.to_dict('records')
+        )
+
 
 
 
