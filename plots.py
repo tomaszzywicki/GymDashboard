@@ -13,7 +13,7 @@ def generate_table_excercises(dataframe):
         'Body part': group['muscle_group'].iloc[0],
         'Sets': group['title'].count(),
         'Reps': group['reps'].sum(),
-        'Volume': (group['weight_kg'] * group['reps']).sum()
+        'Volume': f"{(group['weight_kg'] * group['reps']).sum()} kg"
     })).reset_index()
 
     aggregated_data.sort_values(by='Sets', ascending=False, inplace=True)
@@ -38,9 +38,9 @@ def generate_table_workouts(dataframe):
 
     aggregated_data = dataframe.groupby('title').apply(lambda group: pd.Series({
         'Duration': minutes_to_h_min(group['duration'].iloc[0]),
-        'Volume': f"{(group['weight_kg'] * group['reps']).sum()} kg",
-        'Excercises': group['exercise_title'].nunique(),
         'Sets': group['title'].count(),
+        'Excercises': group['exercise_title'].nunique(),
+        'Volume': f"{(group['weight_kg'] * group['reps']).sum()} kg",
         'Start time': group['start_time'].iloc[0]
     })).reset_index()
 

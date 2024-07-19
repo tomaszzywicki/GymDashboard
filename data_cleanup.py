@@ -27,7 +27,9 @@ def clean_workout_data(df):
         'Lateral Raise (Dumbbell)': 'Shoulders',
         'Cable Fly Crossovers': 'Chest',
         'Shoulder Press (Machine Plates)': 'Shoulders',
-        'Torso Rotation': 'Abs'
+        'Torso Rotation': 'Abs',
+        'Lateral Raise (Cable)': 'Shoulders',
+        'Cable Crunch': 'Abs'
     }
 
     df['muscle_group'] = df['exercise_title'].map(muscle_group_dict)
