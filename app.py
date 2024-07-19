@@ -67,30 +67,30 @@ def render_content(tab):
                 ]),
                 html.Div(className='stat-row', id="stat-row-1", children=[
                     html.Div(className='stat-item', id="stat-item-1", children=[
-                        html.H2('Total workouts'),
-                        html.H3('todo')
+                        html.H2(className='stat-title', children=['Total workouts lifted']),
+                        html.H3(className='stat-text', children=['todo'])
                     ]),
                     html.Div(className='stat-item', id="stat-item-2", children=[
-                        html.H2('Sets performed'),
-                        html.H3('todo')
+                        html.H2(className='stat-title', children=['Sets performed']),
+                        html.H3(className='stat-text', children=['todo'])
                     ]),
                     html.Div(className='stat-item', id="stat-item-3", children=[
-                        html.H2('Volume lifted'),
-                        html.H3('todo')
+                        html.H2(className='stat-title', children=['Volume lifted']),
+                        html.H3(className='stat-text', children=['todo'])
                     ])
                 ]),
                 html.Div(className='stat-row', id="stat-row-1", children=[
                     html.Div(className='stat-item', id="stat-item-1", children=[
-                        html.H2('Total workouts'),
-                        html.H3('todo')
+                        html.H2(className='stat-title', children=['Total workouts lifted']),
+                        html.H3(className='stat-text', children=['todo'])
                     ]),
                     html.Div(className='stat-item', id="stat-item-2", children=[
-                        html.H2('Sets performed'),
-                        html.H3('todo')
+                        html.H2(className='stat-title', children=['Sets performed']),
+                        html.H3(className='stat-text', children=['todo'])
                     ]),
                     html.Div(className='stat-item', id="stat-item-3", children=[
-                        html.H2('Volume lifted'),
-                        html.H3('todo')
+                        html.H2(className='stat-title', children=['Volume lifted']),
+                        html.H3(className='stat-text', children=['todo'])
                     ])
                 ])
 
