@@ -18,12 +18,10 @@ def generate_table_excercises(dataframe):
 
     aggregated_data.sort_values(by='Sets', ascending=False, inplace=True)
     aggregated_data.rename(columns={'exercise_title': 'Excercise'}, inplace=True)
-
     aggregated_data.reset_index(drop=True, inplace=True)
     aggregated_data.index += 1  # Zaczynamy numerację od 1
     aggregated_data.reset_index(inplace=True)
     aggregated_data.rename(columns={'index': 'No'}, inplace=True)
-    
     aggregated_data = aggregated_data.head(5)
 
     return dash_table.DataTable(

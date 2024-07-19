@@ -41,12 +41,59 @@ app.layout = html.Div([
 def render_content(tab):
     if tab == 'tab-1':
         return html.Div([
-            html.H2('Top 5 popular excercises'),
-            html.Div([
-                generate_table_excercises(df_excercise),
-                generate_table_workouts(df_excercise),
-                dcc.Graph(figure=generate_hour_plot(df_excercise)),
-                dcc.Graph(figure=generate_weight_plot(df_weight))
+            html.Div(className='tables-container', children=[
+                html.Div(className='table', id="table1", children=[
+                    html.H2('Last 5 workouts'),
+                    generate_table_workouts(df_excercise)
+                ]),
+                html.Div(className='table', id="table2", children=[
+                    html.H2('Top 5 popular excercises'),
+                    generate_table_excercises(df_excercise)
+                ])
+            ]),
+            html.Div(className='time-plots-container', children=[
+                html.Div(className='time-plot', id="time-plot1", children=[
+                    html.H2('Workouts per hour'),
+                    dcc.Graph(figure=generate_hour_plot(df_excercise))
+                ]),
+                html.Div(className='time-plot', id="time-plot2", children=[
+                    html.H2('Workouts per day')#,
+                    # todo 
+                ])
+            ]),
+            html.Div(className='stats-container', children=[
+                html.Div(className='stats-title', children=[
+                    html.H1('Overall stats')
+                ]),
+                html.Div(className='stat-row', id="stat-row-1", children=[
+                    html.Div(className='stat-item', id="stat-item-1", children=[
+                        html.H2('Total workouts'),
+                        html.H3('todo')
+                    ]),
+                    html.Div(className='stat-item', id="stat-item-2", children=[
+                        html.H2('Sets performed'),
+                        html.H3('todo')
+                    ]),
+                    html.Div(className='stat-item', id="stat-item-3", children=[
+                        html.H2('Volume lifted'),
+                        html.H3('todo')
+                    ])
+                ]),
+                html.Div(className='stat-row', id="stat-row-1", children=[
+                    html.Div(className='stat-item', id="stat-item-1", children=[
+                        html.H2('Total workouts'),
+                        html.H3('todo')
+                    ]),
+                    html.Div(className='stat-item', id="stat-item-2", children=[
+                        html.H2('Sets performed'),
+                        html.H3('todo')
+                    ]),
+                    html.Div(className='stat-item', id="stat-item-3", children=[
+                        html.H2('Volume lifted'),
+                        html.H3('todo')
+                    ])
+                ])
+
             ])
        ])
                          
