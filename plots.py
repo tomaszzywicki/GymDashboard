@@ -6,7 +6,7 @@ from dash import dash_table
 
 # Table
 
-def generate_table(dataframe):
+def generate_table_excercises(dataframe):
     # będzie w zależności od setów, repów
     df = dataframe.groupby('exercise_title').agg({'exercise_title':'count'}).rename(columns={'exercise_title':'count'}).sort_values(by='count', ascending=False).head(5).reset_index()
     return dash_table.DataTable(
@@ -15,6 +15,25 @@ def generate_table(dataframe):
             data=df.to_dict('records')
         )
 
+def generate_table_workouts(dataframe):
+    def minutes_to_h_min(minutes):
+        return f"{(minutes // 60):.0f}h {(minutes % 60):.0f}min"
+    
+    aggregated_data = dataframe.groupby('title').apply(lambda group: pd.Series({
+        'Duration': minutes_to_h_min(group['duration'].iloc[0]),
+        'Volume': f"{(group['weight_kg'] * group['reps']).sum()} kg",
+        'Excercises': group['exercise_title'].nunique(),
+        'Sets': group['title'].count()
+    })).reset_index()
+
+    aggregated_data.sort_values(by='title', ascending=False, inplace=True)
+    aggregated_data.rename(columns={'title': 'Workout'}, inplace=True)
+
+    return dash_table.DataTable(
+        id='workout_table',
+        columns=[{"name": col, 'id': col} for col in aggregated_data.columns],
+        data=aggregated_data.to_dict('records')
+    )
 
 # Hour plot
 
@@ -68,5 +87,5 @@ def generate_weight_lifted_plot(df, excercise):
 # Weight plot
 
 def generate_weight_plot(df):
-    fig = px.line(df, x='Date', y='Value')
+    fig = px.line(df, x='Date', y='Value', labels={'Value' : 'Weight'})
     return fig

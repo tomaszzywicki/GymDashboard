@@ -1,0 +1,23 @@
+.app-header {
+    background-color: yellow;
+    text-align: center;
+}
+
+/* style.css */
+.tab {
+    background-color: #0074D9;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.tabs-container {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+
+.tabs-content {
+    border: none;
+}

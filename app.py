@@ -21,14 +21,12 @@ colors = {
 
 
 app.layout = html.Div([
-    html.Div(style={'backgroundColor': "yellow",
-                    'textAlign': 'center'},
-        className='app-header',
+    html.Div(className='app-header',
         children=[
             html.H1('Gym dashboard'),
                 dcc.Tabs(id="tabs", value='tab-1', children=[
                     dcc.Tab(label='Tab one', value='tab-1'),
-                    dcc.Tab(label='Tab two', value='tab-2'),
+                    dcc.Tab(label='Strength progress', value='tab-2'),
     
                 ])
         ],
@@ -45,7 +43,8 @@ def render_content(tab):
         return html.Div([
             html.H2('Top 5 popular excercises'),
             html.Div([
-                generate_table(df_excercise),
+                generate_table_excercises(df_excercise),
+                generate_table_workouts(df_excercise),
                 dcc.Graph(figure=generate_hour_plot(df_excercise)),
                 dcc.Graph(figure=generate_weight_plot(df_weight))
             ])

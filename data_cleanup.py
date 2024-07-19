@@ -35,6 +35,7 @@ def clean_workout_data(df):
 
     df['start_time'] = pd.to_datetime(df['start_time'], format='%d %b %Y, %H:%M')
     df['end_time'] = pd.to_datetime(df['end_time'], format='%d %b %Y, %H:%M')
+    df['duration'] = (df['end_time'] - df['start_time']).dt.total_seconds() / 60
     return df
 
 
