@@ -4,16 +4,34 @@ import plotly.graph_objects as go
 from dash import dash_table
 
 
-# Table
+# Tables
 
 def generate_table_excercises(dataframe):
     # będzie w zależności od setów, repów
-    df = dataframe.groupby('exercise_title').agg({'exercise_title':'count'}).rename(columns={'exercise_title':'count'}).sort_values(by='count', ascending=False).head(5).reset_index()
+
+    aggregated_data = dataframe.groupby('exercise_title').apply(lambda group: pd.Series({
+        'Body part': group['muscle_group'].iloc[0],
+        'Sets': group['title'].count(),
+        'Reps': group['reps'].sum(),
+        'Volume': (group['weight_kg'] * group['reps']).sum()
+    })).reset_index()
+
+    aggregated_data.sort_values(by='Sets', ascending=False, inplace=True)
+    aggregated_data.rename(columns={'exercise_title': 'Excercise'}, inplace=True)
+
+    aggregated_data.reset_index(drop=True, inplace=True)
+    aggregated_data.index += 1  # Zaczynamy numerację od 1
+    aggregated_data.reset_index(inplace=True)
+    aggregated_data.rename(columns={'index': 'No'}, inplace=True)
+    
+    aggregated_data = aggregated_data.head(5)
+
     return dash_table.DataTable(
-            id = 'exercise_table',
-            columns=[{"name": col, 'id': col} for col in df.columns],
-            data=df.to_dict('records')
-        )
+        id='excercise_table',
+        columns=[{"name": col, 'id': col} for col in aggregated_data.columns],
+        data=aggregated_data.to_dict('records')
+    )
+
 
 def generate_table_workouts(dataframe):
     def minutes_to_h_min(minutes):
