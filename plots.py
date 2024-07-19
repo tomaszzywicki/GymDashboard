@@ -35,19 +35,22 @@ def generate_table_workouts(dataframe):
     def minutes_to_h_min(minutes):
         return f"{(minutes // 60):.0f}h {(minutes % 60):.0f}min"
     
+
     aggregated_data = dataframe.groupby('title').apply(lambda group: pd.Series({
         'Duration': minutes_to_h_min(group['duration'].iloc[0]),
         'Volume': f"{(group['weight_kg'] * group['reps']).sum()} kg",
         'Excercises': group['exercise_title'].nunique(),
-        'Sets': group['title'].count()
+        'Sets': group['title'].count(),
+        'Start time': group['start_time'].iloc[0]
     })).reset_index()
 
-    aggregated_data.sort_values(by='title', ascending=False, inplace=True)
     aggregated_data.rename(columns={'title': 'Workout'}, inplace=True)
+    aggregated_data.sort_values(by='Start time', ascending=False, inplace=True)
+    aggregated_data = aggregated_data.head(5)
 
     return dash_table.DataTable(
         id='workout_table',
-        columns=[{"name": col, 'id': col} for col in aggregated_data.columns],
+        columns=[{"name": col, 'id': col} for col in aggregated_data.columns if col != 'Start time'],
         data=aggregated_data.to_dict('records')
     )
 
