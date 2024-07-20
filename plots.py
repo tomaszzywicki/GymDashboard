@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from dash import dash_table
+from table_style import *
 
 
 # Tables
@@ -27,7 +28,11 @@ def generate_table_excercises(dataframe):
     return dash_table.DataTable(
         id='excercise_table',
         columns=[{"name": col, 'id': col} for col in aggregated_data.columns],
-        data=aggregated_data.to_dict('records')
+        data=aggregated_data.to_dict('records'),
+        style_as_list_view=True,
+        style_cell_conditional=style_cell_conditional_excercises,
+        style_cell=style_cell,
+        style_header=style_header
     )
 
 
@@ -51,7 +56,11 @@ def generate_table_workouts(dataframe):
     return dash_table.DataTable(
         id='workout_table',
         columns=[{"name": col, 'id': col} for col in aggregated_data.columns if col != 'Start time'],
-        data=aggregated_data.to_dict('records')
+        data=aggregated_data.to_dict('records'),
+        style_as_list_view=True,
+        style_cell_conditional=style_cell_conditional_workouts,
+        style_cell=style_cell,
+        style_header=style_header
     )
 
 # Hour plot
