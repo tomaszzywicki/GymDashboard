@@ -82,7 +82,7 @@ def generate_hour_plot(df):
     df.apply(calculate_minutes, axis=1)
 
     total_minutes = sum(minutes)
-    percentage = [(x/total_minutes) * 100 for x in minutes]
+    percentage = [(x/total_minutes) for x in minutes]
 
     fig = go.Figure(data=[go.Bar(
         x = [str(i) for i in range(24)],
@@ -91,11 +91,43 @@ def generate_hour_plot(df):
 
     fig.update_layout(title_text='Workout Time Distribution throughout the day',
                     xaxis_title='Hour',
-                    yaxis_title='Percentage of time spent')
+                    yaxis_title='Percentage of time spent',
+                    plot_bgcolor='#1d232c',
+                    paper_bgcolor='#1d232c',
+                    font=dict(color='white'))
+    
+    fig.update_yaxes(tickformat=".0%")
+    
     return fig
 
 
+def generate_day_plot(df):
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    days_count = [0] * 7
 
+    def calculate_days(row):
+        days_count[row['start_time'].weekday()] += 1
+
+    df.apply(calculate_days, axis=1)
+
+    total_days = sum(days_count)
+    percentage = [(x/total_days) for x in days_count]
+
+    fig = go.Figure(data=[go.Bar(
+        x = days,
+        y = percentage
+    )])
+
+    fig.update_layout(title_text='Workout Days Distribution throughout the week',
+                    xaxis_title='Day',
+                    yaxis_title='Percentage of days',
+                    plot_bgcolor='#1d232c',
+                    paper_bgcolor='#1d232c',
+                    font=dict(color='white'))
+
+    fig.update_yaxes(tickformat=".0%")
+
+    return fig
 
 # Weight lifted progress plot
 
