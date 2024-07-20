@@ -75,21 +75,24 @@ body, html {
 .stat-row {
     display: flex;
     justify-content: space-between;
-    margin: 0px 200px 100px 200px;
+    margin: 0px 100px 100px 100px;
 }
 
 .stat-item {
+    width: 100%;
     display: flex;
     flex-direction: column;
     text-align: center;
 }
 
 .stat-title {
-    font-size: 30px;
+    width: 100%;
+    font-size: 35px;
     font-weight: bold;
     padding-bottom: 10px;
 }
 .stat-text {
+    width: 100%;
     font-size: 30px;
-    font-weight: bold;
+    /* font-weight: bold; */
 }

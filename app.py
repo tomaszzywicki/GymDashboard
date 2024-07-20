@@ -19,6 +19,13 @@ colors = {
     'text' : '#7FDBFF'
 }
 
+workouts_count = df_excercise['title'].nunique()
+total_time = df_excercise.drop_duplicates(subset=['title', 'duration'])['duration'].sum()
+total_time = f"{(total_time // 60):.0f}h {(total_time % 60):.0f}min"
+total_volume = (df_excercise['weight_kg'] * df_excercise['reps']).sum()
+total_sets = df_excercise['title'].count()
+total_reps = int(df_excercise['reps'].sum())
+
 
 app.layout = html.Div([
     html.Div(className='app-header',
@@ -31,7 +38,6 @@ app.layout = html.Div([
                 ])
         ],
     ),
-
     html.Div(id='tabs-content'),
 ])
 
@@ -67,29 +73,29 @@ def render_content(tab):
                 ]),
                 html.Div(className='stat-row', id="stat-row-1", children=[
                     html.Div(className='stat-item', id="stat-item-1", children=[
-                        html.H2(className='stat-title', children=['Total workouts lifted']),
-                        html.H3(className='stat-text', children=['todo'])
+                        html.H2(className='stat-title', children=['Total workouts']),
+                        html.H3(className='stat-text', children=[f'{workouts_count}'])
                     ]),
                     html.Div(className='stat-item', id="stat-item-2", children=[
-                        html.H2(className='stat-title', children=['Sets performed']),
-                        html.H3(className='stat-text', children=['todo'])
+                        html.H2(className='stat-title', children=['Total time']),
+                        html.H3(className='stat-text', children=[f'{total_time}'])
                     ]),
                     html.Div(className='stat-item', id="stat-item-3", children=[
                         html.H2(className='stat-title', children=['Volume lifted']),
-                        html.H3(className='stat-text', children=['todo'])
+                        html.H3(className='stat-text', children=[f'{total_volume} kg'])
                     ])
                 ]),
                 html.Div(className='stat-row', id="stat-row-1", children=[
                     html.Div(className='stat-item', id="stat-item-1", children=[
-                        html.H2(className='stat-title', children=['Total workouts lifted']),
-                        html.H3(className='stat-text', children=['todo'])
+                        html.H2(className='stat-title', children=['Total sets']),
+                        html.H3(className='stat-text', children=[f'{total_sets}'])
                     ]),
                     html.Div(className='stat-item', id="stat-item-2", children=[
-                        html.H2(className='stat-title', children=['Sets performed']),
-                        html.H3(className='stat-text', children=['todo'])
+                        html.H2(className='stat-title', children=['Total reps']),
+                        html.H3(className='stat-text', children=[f'{total_reps}'])
                     ]),
                     html.Div(className='stat-item', id="stat-item-3", children=[
-                        html.H2(className='stat-title', children=['Volume lifted']),
+                        html.H2(className='stat-title', children=['Todo']),
                         html.H3(className='stat-text', children=['todo'])
                     ])
                 ])
