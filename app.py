@@ -145,7 +145,7 @@ def render_content(tab):
 
                     ]),
                     html.Div(className='bodyweight-plot', children=[
-                        html.H2('Bodyweight progress'),
+                        html.H2(className='bodyweight-plot-title', children=['Bodyweight progress']),
                         dcc.Graph(figure=generate_weight_plot(df_weight))
                     ])
                 ]),

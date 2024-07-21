@@ -97,7 +97,7 @@ def generate_hour_plot(df):
                     font=dict(color='white'))
     
     fig.update_yaxes(tickformat=".0%")
-    
+
     return fig
 
 
@@ -138,7 +138,11 @@ def generate_weight_lifted_plot(df, excercise):
     fig = go.Figure(data=go.Scatter(x=df_grouped['start_time'].dt.date, y=df_grouped['weight_kg'], mode='lines+markers'))
     fig.update_layout(title_text=f'Progress of {excercise} over time',
                       xaxis_title='Date',
-                      yaxis_title='Max weight lifted (kg)')
+                      yaxis_title='Max weight lifted (kg)',
+                      plot_bgcolor='#1d232c',
+                      paper_bgcolor='#1d232c',
+                      font=dict(color='white')
+    )
     return fig
 
 
@@ -148,4 +152,9 @@ def generate_weight_lifted_plot(df, excercise):
 
 def generate_weight_plot(df):
     fig = px.line(df, x='Date', y='Value', labels={'Value' : 'Weight'})
+
+    fig.update_layout(plot_bgcolor='#1d232c',
+                      paper_bgcolor='#1d232c',
+                      font=dict(color='white')
+    )
     return fig
