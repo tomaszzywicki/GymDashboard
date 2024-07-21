@@ -135,7 +135,6 @@ def render_content(tab):
                         dcc.DatePickerRange(
                             id='date-picker',
                             min_date_allowed=date(2019, 12, 25),
-                            # max date is today
                             max_date_allowed=date.today(),
                             initial_visible_month=date.today(),
                             start_date=date(2022, 10, 1),
@@ -148,6 +147,16 @@ def render_content(tab):
                     html.Div(className='bodyweight-plot', children=[
                         html.H2('Bodyweight progress'),
                         dcc.Graph(figure=generate_weight_plot(df_weight))
+                    ])
+                ]),
+                html.Div(className='tab-2-second-row', children=[
+                    html.Div(className='excercise-plot', children=[
+                        html.H2(className='excersice-plot-title', children=[f'excercise 1 progress'])
+
+                    ]),
+                    html.Div(className='excercise-plot', children=[
+                        html.H2(className='excersice-plot-title', children=[f'excercise 2 progress'])
+
                     ])
                 ])
             ]),
