@@ -105,14 +105,52 @@ def render_content(tab):
                          
     elif tab == 'tab-2':
         return html.Div([
-            html.H3('Tab content 2'),
-            html.H3('Select muscle group'),
-            dcc.Dropdown(['Chest', 'Back', 'Arms', 'Legs'],
-                         multi=False),
-            html.H3('Select excercise'),
-            dcc.Dropdown(['Dumbell bench press', 'Chest cable fly'],
-                         multi=False),
-            dcc.Graph(figure=generate_weight_lifted_plot(df_excercise, 'Incline Bench Press (Dumbbell)'))
+            html.Div(className='tab-2-container', children=[
+                html.Div(className='tab-2-first-row', children=[
+                    html.Div(className='button-container', children=[
+                        html.Div(className='select-container', children=[
+                            html.Div(className='select-muscle-1', children=[
+                                html.H3('Select muscle group 1'),
+                                dcc.Dropdown(['Chest', 'Back', 'Arms', 'Legs'],
+                                            multi=False),
+                                html.H3('Select excercise 2'),
+                                dcc.Dropdown(['Dumbell bench press', 'Chest cable fly'],
+                                            multi=False),
+                                html.H3('Select y-axis 1'),
+                                dcc.Dropdown(['Max weight', 'Max volume'])
+                            ]),
+                            html.Div(className='select-muscle-2', children=[
+                                html.H3('Select muscle group 2'),
+                                dcc.Dropdown(['Chest', 'Back', 'Arms', 'Legs'],
+                                            multi=False),
+                                html.H3('Select excercise 2'),
+                                dcc.Dropdown(['Dumbell bench press', 'Chest cable fly'],
+                                            multi=False),
+                                html.H3('Select y-axis 2'),
+                                dcc.Dropdown(['Max weight', 'Max volume'])
+                            ]),
+                    ]),
+                    html.Div(className='date-picker-container', children=[
+                        html.H3(className='h3-date', children=['Select date range']),
+                        dcc.DatePickerRange(
+                            id='date-picker',
+                            min_date_allowed=date(2019, 12, 25),
+                            # max date is today
+                            max_date_allowed=date.today(),
+                            initial_visible_month=date.today(),
+                            start_date=date(2022, 10, 1),
+                            end_date=date.today()
+                        )
+                        
+                    ])
+
+                    ]),
+                    html.Div(className='bodyweight-plot', children=[
+                        html.H2('Bodyweight progress'),
+                        dcc.Graph(figure=generate_weight_plot(df_weight))
+                    ])
+                ])
+            ]),
         ])
 
 
