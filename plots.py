@@ -131,7 +131,7 @@ def generate_day_plot(df):
 
 # Weight lifted progress plot
 
-def generate_weight_lifted_plot(df, excercise):
+def generate_weight_lifted_plot1(df, excercise):
     df_excercise = df[df['exercise_title'] == excercise]
     df_grouped = df_excercise.groupby('title')[['weight_kg', 'start_time']].max().reset_index()
 
@@ -157,4 +157,6 @@ def generate_weight_plot(df):
                       paper_bgcolor='#1d232c',
                       font=dict(color='white')
     )
+    fig.update_xaxes(showgrid=False)
+    # fig.update_yaxes(tickformat=".2s kg")
     return fig

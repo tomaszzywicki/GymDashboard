@@ -26,12 +26,7 @@
     padding: 30px;
 }
 
-.select-muscle-1 {
-    display: flex;
-    flex-direction: column;
-}
-
-.select-muscle-2 {
+.select-muscle {
     display: flex;
     flex-direction: column;
 }
@@ -48,7 +43,7 @@
 
 }
 
-.bodyweight-plot {
+.bodyweight-plot-container {
     width: 100%;
     height: 100%;
     background-color: var(--secondary-color);

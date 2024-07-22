@@ -14,10 +14,7 @@ df_weight = clean_weight_data(df_weight)
 
 app = Dash(__name__)
 
-colors = {
-    'background' : '#111111',
-    'text' : '#7FDBFF'
-}
+app.config.suppress_callback_exceptions = True
 
 workouts_count = df_excercise['title'].nunique()
 total_time = df_excercise.drop_duplicates(subset=['title', 'duration'])['duration'].sum()
@@ -25,6 +22,8 @@ total_time = f"{(total_time // 60):.0f}h {(total_time % 60):.0f}min"
 total_volume = (df_excercise['weight_kg'] * df_excercise['reps']).sum()
 total_sets = df_excercise['title'].count()
 total_reps = int(df_excercise['reps'].sum())
+
+muscle_groups = df_excercise['muscle_group'].unique().tolist()
 
 
 app.layout = html.Div([
@@ -34,7 +33,6 @@ app.layout = html.Div([
                 dcc.Tabs(id="tabs", value='tab-1', children=[
                     dcc.Tab(label='Statistics', value='tab-1'),
                     dcc.Tab(label='Strength progress', value='tab-2'),
-    
                 ])
         ],
     ),
@@ -102,33 +100,50 @@ def render_content(tab):
 
             ])
        ])
-                         
+       
     elif tab == 'tab-2':
+        muscle_groups = df_excercise['muscle_group'].unique().tolist()
+        muscle_groups = [{'label': i, 'value': i} for i in muscle_groups if pd.notna(i)]
+        y_axis_options = ['Max weight', 'Max set volume', 'Session volume', 'Session reps']
         return html.Div([
             html.Div(className='tab-2-container', children=[
                 html.Div(className='tab-2-first-row', children=[
                     html.Div(className='button-container', children=[
                         html.Div(className='select-container', children=[
-                            html.Div(className='select-muscle-1', children=[
+                            html.Div(className='select-muscle', id='select-muscle-1', children=[
                                 html.H3('Select muscle group 1'),
-                                dcc.Dropdown(['Chest', 'Back', 'Arms', 'Legs'],
-                                            multi=False),
+                                dcc.Dropdown(id='muscle-group-dropdown-1', 
+                                             options=muscle_groups,
+                                             multi=False,
+                                             value=None),
                                 html.H3('Select excercise 2'),
-                                dcc.Dropdown(['Dumbell bench press', 'Chest cable fly'],
-                                            multi=False),
+                                dcc.Dropdown(id='exercise-dropdown-1', 
+                                             options=[], ### TODO
+                                             multi=False,
+                                             value=None),
                                 html.H3('Select y-axis 1'),
-                                dcc.Dropdown(['Max weight', 'Max volume'])
+                                dcc.Dropdown(id='y-axis-dropdown-1',
+                                             options=y_axis_options)
                             ]),
-                            html.Div(className='select-muscle-2', children=[
+
+                            html.Div(className='select-muscle', id='select-muscle-2', children=[
                                 html.H3('Select muscle group 2'),
-                                dcc.Dropdown(['Chest', 'Back', 'Arms', 'Legs'],
-                                            multi=False),
+                                dcc.Dropdown(id='muscle-group-dropdown-2',
+                                             options=muscle_groups,
+                                             multi=False,
+                                             value=None),
                                 html.H3('Select excercise 2'),
-                                dcc.Dropdown(['Dumbell bench press', 'Chest cable fly'],
-                                            multi=False),
+                                dcc.Dropdown(id='exercise-dropdown-2',
+                                             options=['todo'], ### TODO
+                                             multi=False,
+                                             value=None),
                                 html.H3('Select y-axis 2'),
-                                dcc.Dropdown(['Max weight', 'Max volume'])
-                            ]),
+                                dcc.Dropdown(id='y-axis-dropdown-2',
+                                             options=y_axis_options,
+                                             multi=True,
+                                            #  value=None) idk czy tak czy na odwrót
+                                )
+                            ])
                     ]),
                     html.Div(className='date-picker-container', children=[
                         html.H3(className='h3-date', children=['Select date range']),
@@ -144,26 +159,49 @@ def render_content(tab):
                     ])
 
                     ]),
-                    html.Div(className='bodyweight-plot', children=[
+                    html.Div(className='bodyweight-plot-container', children=[
                         html.H2(className='bodyweight-plot-title', children=['Bodyweight progress']),
-                        dcc.Graph(figure=generate_weight_plot(df_weight))
+                        dcc.Graph(id='bodyweight-plot', figure=generate_weight_plot(df_weight))
                     ])
                 ]),
                 html.Div(className='tab-2-second-row', children=[
                     html.Div(className='excercise-plot', children=[
-                        html.H2(className='excersice-plot-title', children=[f'excercise 1 progress'])
+                        html.H2(className='excercise-plot-title', children=[f'excercise 1 progress'])
 
                     ]),
                     html.Div(className='excercise-plot', children=[
-                        html.H2(className='excersice-plot-title', children=[f'excercise 2 progress'])
+                        html.H2(className='excercise-plot-title', children=[f'excercise 2 progress'])
 
                     ])
                 ])
             ]),
         ])
 
+@app.callback(
+    Output('exercise-dropdown-1', 'options'),
+    Input('muscle-group-dropdown-1', 'value'),
+)
+def update_exercise_dropdown1(muscle_group):
+    return [{'label': i, 'value': i} for i in df_excercise[df_excercise['muscle_group'] == muscle_group]['exercise_title'].unique()]
 
+@app.callback(
+    Output('exercise-dropdown-2', 'options'),
+    Input('muscle-group-dropdown-2', 'value'),
+)
+def update_exercise_dropdown2(muscle_group):
+    return [{'label': i, 'value': i} for i in df_excercise[df_excercise['muscle_group'] == muscle_group]['exercise_title'].unique()]
 
+@app.callback(
+    Output('bodyweight-plot', 'figure'),
+    [Input('date-picker', 'start_date'), Input('date-picker', 'end_date')] 
+)
+def update_weight_plot(start_date, end_date):
+    filtered_df = df_weight[(df_weight['Date'] >= start_date) & (df_weight['Date'] <= end_date)]
+    fig = generate_weight_plot(filtered_df)
+
+    print(f"start_date: {start_date}, end_date: {end_date}")
+
+    return fig
 
 
 if __name__ == '__main__':
