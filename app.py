@@ -115,12 +115,12 @@ def render_content(tab):
                                 dcc.Dropdown(id='muscle-group-dropdown-1', 
                                              options=muscle_groups,
                                              multi=False,
-                                             value=None),
-                                html.H3('Select exercise 2'),
+                                             value='Chest'),
+                                html.H3('Select exercise 1'),
                                 dcc.Dropdown(id='exercise-dropdown-1', 
                                              options=[], ### TODO
                                              multi=False,
-                                             value=None),
+                                             value='Incline Bench Press (Dumbbell)'),
                                 html.H3('Select y-axis 1'),
                                 dcc.Dropdown(id='y-axis-dropdown-1',
                                              options=y_axis_options)
@@ -131,16 +131,16 @@ def render_content(tab):
                                 dcc.Dropdown(id='muscle-group-dropdown-2',
                                              options=muscle_groups,
                                              multi=False,
-                                             value=None),
+                                             value='Arms'),
                                 html.H3('Select exercise 2'),
                                 dcc.Dropdown(id='exercise-dropdown-2',
                                              options=['todo'], ### TODO
                                              multi=False,
-                                             value=None),
+                                             value='Triceps Pushdown'),
                                 html.H3('Select y-axis 2'),
                                 dcc.Dropdown(id='y-axis-dropdown-2',
                                              options=y_axis_options,
-                                             multi=True,
+                                             multi=False,
                                             #  value=None) idk czy tak czy na odwrót
                                 )
                             ])
@@ -168,13 +168,13 @@ def render_content(tab):
 
                     html.Div(className='exercise-plot-container', children=[
                         html.Div(className='exercise-plot', children=[
-                            html.H2(className='exercise-plot-title', children=[f'exercise 1 progress']),
+                            html.H2(className='exercise-plot-title', id='exercise-plot-title-1', children=[f'exercise 1 progress']),
                             dcc.Graph(id='exercise-plot-1', className='exercise-plot', figure=generate_weight_lifted_plot(df_exercise, 'Incline Bench Press (Dumbbell)'))
                         ])
                     ]),
                     html.Div(className='exercise-plot-container', children=[
                         html.Div(className='exercise-plot', children=[
-                            html.H2(className='exercise-plot-title', children=[f'exercise 2 progress']),
+                            html.H2(className='exercise-plot-title', id='exercise-plot-title-2', children=[f'exercise 2 progress']),
                             dcc.Graph(className='exercise-plot', id='exercise-plot-2', figure=generate_weight_lifted_plot(df_exercise, 'Triceps Pushdown'))
                         ])
                     ])
@@ -205,6 +205,57 @@ def update_weight_plot(start_date, end_date):
     fig = generate_weight_plot(filtered_df)
     return fig
 
+@app.callback(
+    Output('exercise-plot-1', 'figure'),
+    [Input('exercise-dropdown-1', 'value'),
+     Input('y-axis-dropdown-1', 'value'),
+     Input('date-picker', 'start_date'), 
+     Input('date-picker', 'end_date')]
+)
+def update_exercise_plot1(exercise, y_axis, start_date, end_date):
+    filtered_df = df_exercise[(df_exercise['exercise_title'] == exercise) & (df_exercise['start_time'] >= start_date) & (df_exercise['start_time'] <= end_date)]
+    fig = generate_weight_lifted_plot(filtered_df, exercise)
+    fig.update_layout(
+        title_text=f'Progress of {exercise} over time',
+        yaxis_title=y_axis,
+        plot_bgcolor='#1d232c',
+        paper_bgcolor='#1d232c',
+        font=dict(color='white')
+    )
+    return fig
+
+@app.callback(
+    Output('exercise-plot-2', 'figure'),
+    [Input('exercise-dropdown-2', 'value'),
+     Input('y-axis-dropdown-2', 'value'),
+     Input('date-picker', 'start_date'), 
+     Input('date-picker', 'end_date')]
+)
+def update_exercise_plot2(exercise, y_axis, start_date, end_date):
+    filtered_df = df_exercise[(df_exercise['exercise_title'] == exercise) & (df_exercise['start_time'] >= start_date) & (df_exercise['start_time'] <= end_date)]
+    fig = generate_weight_lifted_plot(filtered_df, exercise)
+    fig.update_layout(
+        title_text=f'Progress of {exercise} over time',
+        yaxis_title=y_axis,
+        plot_bgcolor='#1d232c',
+        paper_bgcolor='#1d232c',
+        font=dict(color='white')
+    )
+    return fig
+
+@app.callback(
+    Output('exercise-plot-title-1', 'children'),
+    Input('exercise-dropdown-1', 'value')
+)
+def update_exercise_plot_title1(exercise):
+    return f'{exercise} progress'
+
+@app.callback(
+    Output('exercise-plot-title-2', 'children'),
+    Input('exercise-dropdown-2', 'value')
+)
+def update_exercise_plot_title2(exercise):
+    return f'{exercise} progress'
 
 if __name__ == '__main__':
     app.run(debug=True)

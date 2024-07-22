@@ -63,7 +63,6 @@ def generate_table_workouts(dataframe):
         style_header=style_header
     )
 
-# Hour plot
 
 def generate_hour_plot(df):
     minutes = [0] * 24
@@ -129,25 +128,22 @@ def generate_day_plot(df):
 
     return fig
 
-# Weight lifted progress plot
 
 def generate_weight_lifted_plot(df, exercise):
     df_exercise = df[df['exercise_title'] == exercise].groupby('start_time')['weight_kg'].max().reset_index()
 
     fig = go.Figure(data=go.Scatter(x=df_exercise['start_time'].dt.date, y=df_exercise['weight_kg'], mode='lines+markers'))
-    fig.update_layout(title_text=f'Progress of {exercise} over time',
+    print(exercise is None)
+    fig.update_layout(title_text=f'' if exercise is None else f'Progress of {exercise} over time',
                       xaxis_title='Date',
                       yaxis_title='Max weight lifted (kg)',
                       plot_bgcolor='#1d232c',
                       paper_bgcolor='#1d232c',
                       font=dict(color='white')
     )
+    fig.update_xaxes(showgrid=False)
     return fig
 
-
-
-
-# Weight plot
 
 def generate_weight_plot(df):
     fig = px.line(df, x='Date', y='Value', labels={'Value' : 'Weight'})
