@@ -7,7 +7,7 @@ from table_style import *
 
 # Tables
 
-def generate_table_excercises(dataframe):
+def generate_table_exercises(dataframe):
     # będzie w zależności od setów, repów
 
     aggregated_data = dataframe.groupby('exercise_title').apply(lambda group: pd.Series({
@@ -18,7 +18,7 @@ def generate_table_excercises(dataframe):
     })).reset_index()
 
     aggregated_data.sort_values(by='Sets', ascending=False, inplace=True)
-    aggregated_data.rename(columns={'exercise_title': 'Excercise'}, inplace=True)
+    aggregated_data.rename(columns={'exercise_title': 'Exercise'}, inplace=True)
     aggregated_data.reset_index(drop=True, inplace=True)
     aggregated_data.index += 1  # Zaczynamy numerację od 1
     aggregated_data.reset_index(inplace=True)
@@ -26,11 +26,11 @@ def generate_table_excercises(dataframe):
     aggregated_data = aggregated_data.head(5)
 
     return dash_table.DataTable(
-        id='excercise_table',
+        id='exercise_table',
         columns=[{"name": col, 'id': col} for col in aggregated_data.columns],
         data=aggregated_data.to_dict('records'),
         style_as_list_view=True,
-        style_cell_conditional=style_cell_conditional_excercises,
+        style_cell_conditional=style_cell_conditional_exercises,
         style_cell=style_cell,
         style_header=style_header
     )
@@ -44,7 +44,7 @@ def generate_table_workouts(dataframe):
     aggregated_data = dataframe.groupby('title').apply(lambda group: pd.Series({
         'Duration': minutes_to_h_min(group['duration'].iloc[0]),
         'Sets': group['title'].count(),
-        'Excercises': group['exercise_title'].nunique(),
+        'Exercises': group['exercise_title'].nunique(),
         'Volume': f"{(group['weight_kg'] * group['reps']).sum()} kg",
         'Start time': group['start_time'].iloc[0]
     })).reset_index()
@@ -131,12 +131,11 @@ def generate_day_plot(df):
 
 # Weight lifted progress plot
 
-def generate_weight_lifted_plot1(df, excercise):
-    df_excercise = df[df['exercise_title'] == excercise]
-    df_grouped = df_excercise.groupby('title')[['weight_kg', 'start_time']].max().reset_index()
+def generate_weight_lifted_plot(df, exercise):
+    df_exercise = df[df['exercise_title'] == exercise].groupby('start_time')['weight_kg'].max().reset_index()
 
-    fig = go.Figure(data=go.Scatter(x=df_grouped['start_time'].dt.date, y=df_grouped['weight_kg'], mode='lines+markers'))
-    fig.update_layout(title_text=f'Progress of {excercise} over time',
+    fig = go.Figure(data=go.Scatter(x=df_exercise['start_time'].dt.date, y=df_exercise['weight_kg'], mode='lines+markers'))
+    fig.update_layout(title_text=f'Progress of {exercise} over time',
                       xaxis_title='Date',
                       yaxis_title='Max weight lifted (kg)',
                       plot_bgcolor='#1d232c',

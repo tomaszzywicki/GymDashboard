@@ -48,3 +48,27 @@
     height: 100%;
     background-color: var(--secondary-color);
 }
+
+.tab-2-second-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.exercise-plot-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.exercise-plot {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--secondary-color);
+    width: 100%;
+}
+
+.exercise-plot-title {
+    text-align: left;
+    padding-left: 30px;
+}

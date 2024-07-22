@@ -19,7 +19,7 @@ style_header= {
     'fontWeight': 'bold',
 }
 
-style_cell_conditional_excercises=[
+style_cell_conditional_exercises=[
     {
         'if': {'column_id': col},
         'textAlign': 'left',
