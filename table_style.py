@@ -23,7 +23,7 @@ style_cell_conditional_exercises=[
     {
         'if': {'column_id': col},
         'textAlign': 'left',
-    } for col in ['Excercise', 'Body part']
+    } for col in ['Exercise', 'Body part']
 ]
 
 

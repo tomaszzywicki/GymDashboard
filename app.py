@@ -28,7 +28,7 @@ app.layout = html.Div([
     html.Div(className='app-header',
         children=[
             html.H1('Gym dashboard'),
-                dcc.Tabs(id="tabs", value='tab-2', children=[
+                dcc.Tabs(id="tabs", value='tab-1', children=[
                     dcc.Tab(label='Statistics', value='tab-1'),
                     dcc.Tab(label='Strength progress', value='tab-2'),
                 ])
