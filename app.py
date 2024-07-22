@@ -54,14 +54,18 @@ def render_content(tab):
                 ])
             ]),
             html.Div(className='time-plots-container', children=[
-                html.Div(className='time-plot', id="time-plot1", children=[
-                    html.H2(className='time-plot-title', children=['Workouts per hour']),
-                    dcc.Graph(figure=generate_hour_plot(df_exercise))
-                ]),
-                html.Div(className='time-plot', id="time-plot2", children=[
-                    html.H2(className='time-plot-title', children=['Workouts per day']),
-                    dcc.Graph(figure=generate_day_plot(df_exercise))
-                ])
+                # html.Div(className='test-div', children=[
+                    html.Div(className='time-plot', id="time-plot1", children=[
+                        html.H2(className='time-plot-title', children=['Workouts per hour']),
+                        dcc.Graph(figure=generate_hour_plot(df_exercise))
+                    ]),
+                # ]),
+                # html.Div(className='test-div', children=[
+                    html.Div(className='time-plot', id="time-plot2", children=[
+                        html.H2(className='time-plot-title', children=['Workouts per day']),
+                        dcc.Graph(figure=generate_day_plot(df_exercise))
+                    ])
+                # ])
             ]),
             html.Div(className='stats-container', children=[
                 html.Div(className='stats-title', children=[
