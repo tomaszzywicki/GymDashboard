@@ -123,25 +123,7 @@ def generate_day_plot(df):
                     plot_bgcolor='#1d232c',
                     paper_bgcolor='#1d232c',
                     font=dict(color='white'))
-
     fig.update_yaxes(tickformat=".0%")
-
-    return fig
-
-
-def generate_weight_lifted_plot(df, exercise):
-    df_exercise = df[df['exercise_title'] == exercise].groupby('start_time')['weight_kg'].max().reset_index()
-
-    fig = go.Figure(data=go.Scatter(x=df_exercise['start_time'].dt.date, y=df_exercise['weight_kg'], mode='lines+markers'))
-    print(exercise is None)
-    fig.update_layout(title_text=f'' if exercise is None else f'Progress of {exercise} over time',
-                      xaxis_title='Date',
-                      yaxis_title='Max weight lifted (kg)',
-                      plot_bgcolor='#1d232c',
-                      paper_bgcolor='#1d232c',
-                      font=dict(color='white')
-    )
-    fig.update_xaxes(showgrid=False)
     return fig
 
 
@@ -155,3 +137,40 @@ def generate_weight_plot(df):
     fig.update_xaxes(showgrid=False)
     # fig.update_yaxes(tickformat=".2s kg")
     return fig
+
+
+def generate_weight_lifted_plot(df, exercise, y_axis_type='max weight'):
+    df_exercise = df[df['exercise_title'] == exercise]
+    y_variable = 'weight_kg'
+
+    if y_axis_type == 'max weight':
+        df_exercise = df_exercise.groupby('start_time')['weight_kg'].max().reset_index()
+        y_variable = 'weight_kg'
+
+    elif y_axis_type == 'max set volume':
+        df_exercise = df_exercise.groupby('start_time').apply(lambda group: pd.Series({
+            'max_volume': (group['weight_kg'] * group['reps']).max()
+        })).reset_index()
+        y_variable = 'max_volume'
+
+    elif y_axis_type == 'session volume':
+        df_exercise = df_exercise.groupby('start_time').apply(lambda group: pd.Series({
+            'session_volume': (group['weight_kg'] * group['reps']).sum()
+        })).reset_index()
+        y_variable = 'session_volume'
+
+    elif y_axis_type == 'session reps':
+        df_exercise = df_exercise.groupby('start_time')['reps'].sum().reset_index()
+        y_variable = 'reps'
+
+    fig = go.Figure(data=go.Scatter(x=df_exercise['start_time'], y=df_exercise[y_variable], mode='lines+markers'))
+    fig.update_layout(title_text=f'' if exercise is None else f'Progress of {exercise} over time',
+                      xaxis_title='Date',
+                      yaxis_title='Max weight lifted (kg)',
+                      plot_bgcolor='#1d232c',
+                      paper_bgcolor='#1d232c',
+                      font=dict(color='white')
+    )
+    fig.update_xaxes(showgrid=False)
+    return fig
+

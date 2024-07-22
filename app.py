@@ -23,8 +23,6 @@ total_volume = (df_exercise['weight_kg'] * df_exercise['reps']).sum()
 total_sets = df_exercise['title'].count()
 total_reps = int(df_exercise['reps'].sum())
 
-muscle_groups = df_exercise['muscle_group'].unique().tolist()
-
 
 app.layout = html.Div([
     html.Div(className='app-header',
@@ -104,7 +102,8 @@ def render_content(tab):
     elif tab == 'tab-2':
         muscle_groups = df_exercise['muscle_group'].unique().tolist()
         muscle_groups = [{'label': i, 'value': i} for i in muscle_groups if pd.notna(i)]
-        y_axis_options = ['Max weight', 'Max set volume', 'Session volume', 'Session reps']
+        y_axis_options = ['max weight', 'max set volume', 'session volume', 'session reps']
+
         return html.Div([
             html.Div(className='tab-2-container', children=[
                 html.Div(className='tab-2-first-row', children=[
@@ -123,7 +122,9 @@ def render_content(tab):
                                              value='Incline Bench Press (Dumbbell)'),
                                 html.H3('Select y-axis 1'),
                                 dcc.Dropdown(id='y-axis-dropdown-1',
-                                             options=y_axis_options)
+                                             options=y_axis_options,
+                                             multi=False,
+                                             value='max weight')
                             ]),
 
                             html.Div(className='select-muscle', id='select-muscle-2', children=[
@@ -141,8 +142,7 @@ def render_content(tab):
                                 dcc.Dropdown(id='y-axis-dropdown-2',
                                              options=y_axis_options,
                                              multi=False,
-                                            #  value=None) idk czy tak czy na odwrót
-                                )
+                                             value='max weight')
                             ])
                     ]),
                     html.Div(className='date-picker-container', children=[
@@ -214,9 +214,9 @@ def update_weight_plot(start_date, end_date):
 )
 def update_exercise_plot1(exercise, y_axis, start_date, end_date):
     filtered_df = df_exercise[(df_exercise['exercise_title'] == exercise) & (df_exercise['start_time'] >= start_date) & (df_exercise['start_time'] <= end_date)]
-    fig = generate_weight_lifted_plot(filtered_df, exercise)
+    fig = generate_weight_lifted_plot(filtered_df, exercise, y_axis)
     fig.update_layout(
-        title_text=f'Progress of {exercise} over time',
+        title_text='',#f'' if exercise is None else f'Progress of {exercise} over time',
         yaxis_title=y_axis,
         plot_bgcolor='#1d232c',
         paper_bgcolor='#1d232c',
@@ -233,9 +233,9 @@ def update_exercise_plot1(exercise, y_axis, start_date, end_date):
 )
 def update_exercise_plot2(exercise, y_axis, start_date, end_date):
     filtered_df = df_exercise[(df_exercise['exercise_title'] == exercise) & (df_exercise['start_time'] >= start_date) & (df_exercise['start_time'] <= end_date)]
-    fig = generate_weight_lifted_plot(filtered_df, exercise)
+    fig = generate_weight_lifted_plot(filtered_df, exercise, y_axis)
     fig.update_layout(
-        title_text=f'Progress of {exercise} over time',
+        title_text='',#f'' if exercise is None else f'Progress of {exercise} over time',
         yaxis_title=y_axis,
         plot_bgcolor='#1d232c',
         paper_bgcolor='#1d232c',
