@@ -153,7 +153,7 @@ def render_content(tab):
                         html.H3(className='h3-date', children=['Select date range']),
                         dcc.DatePickerRange(
                             id='date-picker',
-                            min_date_allowed=date(2019, 12, 25),
+                            min_date_allowed=date(2010, 12, 25),
                             max_date_allowed=date(2100, 1, 1),
                             initial_visible_month=date.today(),
                             start_date=date(2022, 10, 1),
@@ -163,13 +163,6 @@ def render_content(tab):
                     ])
 
                     ]),
-                    html.Div(className='bodyweight-plot-container', children=[
-                        html.H2(className='bodyweight-plot-title', children=['Bodyweight progress']),
-                        dcc.Graph(id='bodyweight-plot', figure=generate_weight_plot(df_weight))
-                    ])
-                ]),
-                html.Div(className='tab-2-second-row', children=[
-
                     html.Div(className='exercise-plot-container', children=[
                         html.Div(className='exercise-plot', children=[
                             html.H2(className='exercise-plot-title', id='exercise-plot-title-1', children=[f'exercise 1 progress']),
@@ -181,6 +174,12 @@ def render_content(tab):
                             html.H2(className='exercise-plot-title', id='exercise-plot-title-2', children=[f'exercise 2 progress']),
                             dcc.Graph(className='exercise-plot', id='exercise-plot-2', figure=generate_weight_lifted_plot(df_exercise, 'Triceps Pushdown'))
                         ])
+                    ])
+                ]),
+                html.Div(className='tab-2-second-row', children=[
+                    html.Div(className='bodyweight-plot-container', children=[
+                        html.H2(className='bodyweight-plot-title', children=['Bodyweight progress']),
+                        dcc.Graph(id='bodyweight-plot', figure=generate_weight_plot(df_weight))
                     ])
                 ])
             ]),

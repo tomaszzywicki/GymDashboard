@@ -130,12 +130,14 @@ def generate_day_plot(df):
 def generate_weight_plot(df):
     fig = px.line(df, x='Date', y='Value', labels={'Value' : 'Weight'})
 
-    fig.update_layout(plot_bgcolor='#1d232c',
+    fig.update_layout(title_text='',
+                      plot_bgcolor='#1d232c',
                       paper_bgcolor='#1d232c',
-                      font=dict(color='white')
+                      font=dict(color='white'),
+                      margin=dict(l=180, r=0, t=50, b=80)
     )
     fig.update_xaxes(showgrid=False)
-    # fig.update_yaxes(tickformat=".2s kg")
+    fig.update_yaxes(ticksuffix="kg")
     return fig
 
 
@@ -164,13 +166,15 @@ def generate_weight_lifted_plot(df, exercise, y_axis_type='max weight'):
         y_variable = 'reps'
 
     fig = go.Figure(data=go.Scatter(x=df_exercise['start_time'], y=df_exercise[y_variable], mode='lines+markers'))
-    fig.update_layout(title_text=f'' if exercise is None else f'Progress of {exercise} over time',
+    fig.update_layout(title_text='',
                       xaxis_title='Date',
                       yaxis_title='Max weight lifted (kg)',
-                      plot_bgcolor='#1d232c',
-                      paper_bgcolor='#1d232c',
-                      font=dict(color='white')
+                      plot_bgcolor='rgba(0, 0, 0, 0)',
+                      paper_bgcolor='rgba(0, 0, 0, 0)',
+                      font=dict(color='white'),
+                      margin=dict(l=30, r=30, t=100, b=100)
     )
     fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(ticksuffix="kg")
     return fig
 

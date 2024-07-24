@@ -30,7 +30,7 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: space-between;
     width: 100%;
     gap: 2%;
-    padding: 45px 0px 15px 0px;
+    padding: 25px 0px 15px 0px;
 }
 
 .table {
@@ -118,5 +118,5 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .dash-graph {
-    width: 90%; /* tak o bo inaczej przy powiększaniu strony się rozjeżdża w chuj */
+    width: 90%; /*tak o bo inaczej przy powiększaniu strony się rozjeżdża w chuj */ 
 }
