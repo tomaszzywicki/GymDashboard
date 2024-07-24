@@ -85,7 +85,7 @@ def render_content(tab):
                         html.H3(className='stat-text', children=[f'{total_volume} kg'])
                     ])
                 ]),
-                html.Div(className='stat-row', id="stat-row-1", children=[
+                html.Div(className='stat-row', id="stat-row-2", children=[
                     html.Div(className='stat-item', id="stat-item-1", children=[
                         html.H2(className='stat-title', children=['Total sets']),
                         html.H3(className='stat-text', children=[f'{total_sets}'])
@@ -157,7 +157,8 @@ def render_content(tab):
                             max_date_allowed=date(2100, 1, 1),
                             initial_visible_month=date.today(),
                             start_date=date(2022, 10, 1),
-                            end_date=date.today()
+                            end_date=date.today(),
+                            display_format="DD-MM-YYYY",
                         )
                         
                     ])
